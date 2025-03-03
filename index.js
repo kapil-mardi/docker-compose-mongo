@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser')
 const port = 3000;
+
+app.use(express.json());
 
 mongoose.connect(
     'mongodb://mongo:27017/user_data', 
@@ -30,6 +33,15 @@ app.get('/user/:id', async (req, res) => {
             res.send("Error: ");
         }
         res.send(user);
+});
+
+app.post('/user', async (req, res) => {
+    const user = req.body;
+    console.log(user);
+    const newUser = new users({...user});
+    const u = await newUser.save();
+    res.send(u);
+    
 });
 
 app.listen(port, () => {
